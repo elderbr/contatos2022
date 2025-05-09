@@ -1,5 +1,7 @@
 package com.adrianocodenow.contatos2022.interfaces;
 
+import com.adrianocodenow.contatos2022.exceptions.PhoneException;
+
 /**
  *
  * @author ElderBR
@@ -19,7 +21,7 @@ public interface IPhoneType {
             instance.setNamePhoneType(getNamePhoneType());
             return instance;
         } catch (Exception e) {
-            throw new RuntimeException("Erro ao converter a classe "+ clazz.getSimpleName());
+            throw new PhoneException("Erro ao converter a classe "+ clazz.getSimpleName());
         }
     }    
 }
