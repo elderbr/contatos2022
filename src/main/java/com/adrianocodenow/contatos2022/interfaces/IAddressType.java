@@ -1,5 +1,7 @@
 package com.adrianocodenow.contatos2022.interfaces;
 
+import com.adrianocodenow.contatos2022.exceptions.AddressException;
+
 /**
  *
  * @author ElderBR
@@ -18,7 +20,7 @@ public interface IAddressType {
             instance.setNameAddressType(getNameAddressType());
             return instance;
         } catch (Exception e) {
-            throw new RuntimeException("Erro ao converter a classe "+ clazz.getSimpleName());
+            throw new AddressException("Erro ao converter a classe "+ clazz.getSimpleName());
         }
     }
 }
