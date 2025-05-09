@@ -1,5 +1,6 @@
 package com.adrianocodenow.contatos2022.interfaces;
 
+import com.adrianocodenow.contatos2022.exceptions.UserException;
 import java.time.LocalDate;
 
 /**
@@ -20,7 +21,7 @@ public interface IUser extends IUserSimples{
             instance.setDateCreation(getDateCreation());            
             return instance;
         } catch (Exception e) {
-            throw new RuntimeException("Erro ao converter User "+ clazz.getSimpleName());
+            throw new UserException("Erro ao converter User "+ clazz.getSimpleName());
         }
     }
 }

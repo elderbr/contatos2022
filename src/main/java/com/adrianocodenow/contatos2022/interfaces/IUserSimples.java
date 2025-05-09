@@ -1,5 +1,7 @@
 package com.adrianocodenow.contatos2022.interfaces;
 
+import com.adrianocodenow.contatos2022.exceptions.UserException;
+
 /**
  *
  * @author ElderBR
@@ -29,7 +31,7 @@ public interface IUserSimples {
             instance.setStatus(getStatus());
             return instance;
         } catch (Exception e) {
-            throw new RuntimeException("Erro ao converter UserSimples "+ clazz.getSimpleName()+"\nErro: "+ e.getMessage());
+            throw new UserException("Erro ao converter UserSimples "+ clazz.getSimpleName()+"\nErro: "+ e.getMessage());
         }
     }
     
