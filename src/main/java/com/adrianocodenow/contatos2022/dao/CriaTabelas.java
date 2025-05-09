@@ -80,7 +80,7 @@ public class CriaTabelas {
             criaTabelaTipoEnderecos();
             criaTabelaTipoTelefones();
         }
-        if (TipoEnderecoDao.lista().isEmpty()) {
+        if (TipoEnderecoDao.listEndereco.isEmpty()) {
             TipoEndereco tipoEndereco = new TipoEndereco();
             tipoEndereco.setTipoEndereco("Residência");
             new TipoEnderecoDao().insere(tipoEndereco);
