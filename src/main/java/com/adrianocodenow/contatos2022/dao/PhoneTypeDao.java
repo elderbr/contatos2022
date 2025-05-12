@@ -3,6 +3,9 @@ package com.adrianocodenow.contatos2022.dao;
 import com.adrianocodenow.contatos2022.exceptions.PhoneException;
 import com.adrianocodenow.contatos2022.factory.ConnectionFactory;
 import com.adrianocodenow.contatos2022.interfaces.IPhoneType;
+import com.adrianocodenow.contatos2022.model.PhoneType;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -55,6 +58,26 @@ public class PhoneTypeDao extends ConnectionFactory {
             desconect();
         }
         throw new PhoneException("Erro ao adicionar novo tipo de telefone!");
+    }
+    
+    public List<IPhoneType> findAll(){
+        List<IPhoneType> list = new ArrayList<>();
+        try {
+            sql = "SELECT * FROM "+ TABLE_NAME;
+            prepared(sql);
+            rs = smt.executeQuery();
+            while(rs.next()){
+                PhoneType type = new PhoneType();
+                type.setIdPhoneType(rs.getInt(ID_PHONE_TYPE));
+                type.setNamePhoneType(rs.getString(NAME_PHONE_TYPE));
+                list.add(type);
+            }
+            return list;
+        } catch (Exception e) {
+            throw new PhoneException("Erro ao buscar os tipos de telefones!", e);
+        }finally{
+            desconect();
+        }
     }
     
 }
