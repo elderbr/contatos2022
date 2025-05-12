@@ -2,8 +2,6 @@ package com.adrianocodenow.contatos2022.model;
 
 import com.adrianocodenow.contatos2022.interfaces.IPhone;
 import com.adrianocodenow.contatos2022.interfaces.IPhoneType;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  *

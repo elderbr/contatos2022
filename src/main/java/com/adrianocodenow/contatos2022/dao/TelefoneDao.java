@@ -7,7 +7,6 @@ import com.adrianocodenow.contatos2022.factory.ConnectionFactory;
 import com.adrianocodenow.contatos2022.interfaces.IPhone;
 import com.adrianocodenow.contatos2022.model.Phone;
 import com.adrianocodenow.contatos2022.model.Telefone;
-import com.adrianocodenow.contatos2022.utils.Msg;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

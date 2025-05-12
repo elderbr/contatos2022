@@ -1,7 +1,6 @@
 package com.adrianocodenow.contatos2022.interfaces;
 
 import com.adrianocodenow.contatos2022.exceptions.PhoneException;
-import java.util.Collection;
 
 /**
  *
