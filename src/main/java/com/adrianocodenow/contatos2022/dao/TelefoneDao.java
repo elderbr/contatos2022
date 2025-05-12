@@ -1,7 +1,10 @@
 package com.adrianocodenow.contatos2022.dao;
 
 import com.adrianocodenow.contatos2022.controller.Config;
+import com.adrianocodenow.contatos2022.exceptions.ConexaoException;
+import com.adrianocodenow.contatos2022.exceptions.PhoneException;
 import com.adrianocodenow.contatos2022.factory.ConnectionFactory;
+import com.adrianocodenow.contatos2022.interfaces.IPhone;
 import com.adrianocodenow.contatos2022.model.Telefone;
 
 import java.sql.Connection;
@@ -10,6 +13,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -17,7 +21,48 @@ import java.util.logging.Logger;
  *
  * @author apereira
  */
-public class TelefoneDao {
+public class TelefoneDao extends ConnectionFactory {
+
+    private static TelefoneDao instance;
+    private static final String CREATE_TABLE = "CREATE TABLE IS NOT EXIST telefone ("
+            + "id_phone INTEGER PRIMARY KEY NOT NUL, "
+            + "number_phone TEXT NOT NULL UNIQUE"
+            + ");";
+
+    private static final String[] COLUMNS_SQL = {"id_phone", "number_phone"};
+
+    private TelefoneDao() {
+        try {
+            exec(CREATE_TABLE);
+        } catch (SQLException ex) {
+            throw new ConexaoException("Erro ao criar a tabela telefone!", ex);
+        } finally {
+            desconect();
+        }
+    }
+
+    public static TelefoneDao getInstance() {
+        if (Objects.isNull(instance)) {
+            instance = new TelefoneDao();
+        }
+        return instance;
+    }
+
+    public static int insert(IPhone phone) {
+        try {
+            String sql
+                    = "INSERT INTO "
+                    + "telefones(" + COLUMNS_SQL + ") "
+                    + "VALUES(?, ?)";
+            prepared(sql);
+            smt.setString(0, phone.getNumberPhone());
+            smt.executeUpdate();
+            ResultSet rs = smt.getGeneratedKeys();
+            return rs.getInt(0);
+        } catch (Exception e) {
+            throw new PhoneException("Erro ao adicionar novo telefone!", e);
+        }
+    }
 
     public static boolean insere(Telefone objTelefone) {
         String sql
