@@ -19,7 +19,6 @@ public class Msg {
     }
     public static void ServerErro(@NotNull String msg,@NotNull String methodo, @NotNull Exception e) {
         System.err.println(msg+"\nMethodo: "+ methodo +"\nErro: "+ e.getMessage());
-        e.printStackTrace();
     }
     
     public static void Aviso(Component parentComponent, String msg){
