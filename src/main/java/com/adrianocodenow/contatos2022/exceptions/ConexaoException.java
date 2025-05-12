@@ -6,10 +6,10 @@ import com.adrianocodenow.contatos2022.utils.Msg;
  *
  * @author ElderBR
  */
-public class ConexaoException extends RuntimeException {
+public class ConexaoException extends RuntimeException {    
 
-    public ConexaoException() {
-        Msg.ServerErro(getMessage(), this);
+    public ConexaoException(String message) {
+        super(message);
     }
 
     public ConexaoException(String message, Exception error) {
