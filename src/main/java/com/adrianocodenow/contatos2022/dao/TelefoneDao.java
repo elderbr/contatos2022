@@ -38,7 +38,7 @@ public class TelefoneDao extends ConnectionFactory {
         } catch (SQLException ex) {
             throw new ConexaoException("Erro ao criar a tabela phone!", ex);
         } finally {
-            desconect();            
+            desconect();
         }
     }
 
@@ -58,24 +58,24 @@ public class TelefoneDao extends ConnectionFactory {
             smt.executeUpdate();
             conn.commit();
             ResultSet rs = smt.getGeneratedKeys();
-            if(rs.next()){
+            if (rs.next()) {
                 return rs.getInt(1);
             }
             throw new PhoneException("Erro ao adicionar novo telefone!");
         } catch (Exception e) {
             throw new PhoneException("Erro ao adicionar novo telefone!", e);
-        }finally{
+        } finally {
             desconect();
         }
     }
-    
-    public IPhone findById(int id){
+
+    public IPhone findById(int id) {
         sql = "SELECT * FROM phone WHERE id_phone = ?";
         try {
             prepared(sql);
             smt.setInt(1, id);
             rs = smt.executeQuery();
-            while(rs.next()){
+            while (rs.next()) {
                 Phone phone = new Phone();
                 phone.setIdPhone(rs.getInt(COLUMNS_SQL[0]));
                 phone.setNumberPhone(rs.getString(COLUMNS_SQL[1]));
@@ -83,10 +83,30 @@ public class TelefoneDao extends ConnectionFactory {
             }
         } catch (Exception e) {
             throw new PhoneException("Erro ao buscar o telefone!", e);
-        }finally{
+        } finally {
             desconect();
         }
-        throw new PhoneException("Erro ao buscar o telefone com o ID "+ id);
+        throw new PhoneException("Erro ao buscar o telefone com o ID " + id);
+    }
+
+    public IPhone findByNumber(String number) {
+        sql = "SELECT * FROM phone WHERE number_phone = ?";
+        try {
+            prepared(sql);
+            smt.setString(1, number);
+            rs = smt.executeQuery();
+            while (rs.next()) {
+                Phone phone = new Phone();
+                phone.setIdPhone(rs.getInt(COLUMNS_SQL[0]));
+                phone.setNumberPhone(rs.getString(COLUMNS_SQL[1]));
+                return phone;
+            }
+        } catch (Exception e) {
+            throw new PhoneException("Erro ao buscar o telefone pelo o número!", e);
+        } finally {
+            desconect();
+        }
+        throw new PhoneException("O número " + number + " do telefone não existe!");
     }
 
     public static boolean insere(Telefone objTelefone) {
