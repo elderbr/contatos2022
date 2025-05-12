@@ -24,12 +24,17 @@ import java.util.Objects;
 public class TelefoneDao extends ConnectionFactory {
 
     private static TelefoneDao instance;
-    private static final String TABLE_NAME = "phone";
-    private static final String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS phone ("
-            + "id_phone INTEGER PRIMARY KEY AUTOINCREMENT, "
-            + "number_phone TEXT NOT NULL UNIQUE"
+    private static final String TABLE_NAME = "tb_phone";
+    public static final String ID_PHONE = "id_phone";
+    public static final String NUMBER_PHONE = "name_phone";
+    public static final String ID_PHONE_TYPE = "id_phone_type";
+    private static final String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " ("
+            + ID_PHONE + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+            + NUMBER_PHONE + " TEXT NOT NULL UNIQUE, "
+            + ID_PHONE_TYPE + " INTEGER NOT NULL "
+            + "CONSTRAINT fk_phone_type REFERENCES tb_phone_type (" + ID_PHONE_TYPE + ") ON DELETE CASCADE"
             + ");";
-    private static final String[] COLUMNS_SQL = {"id_phone", "number_phone"};
+    private static final String[] COLUMNS_SQL = {ID_PHONE, NUMBER_PHONE, ID_PHONE_TYPE};
 
     private TelefoneDao() {
         try {
@@ -51,10 +56,11 @@ public class TelefoneDao extends ConnectionFactory {
 
     public int insert(IPhone phone) {
         try {
-            String sql = "INSERT INTO phone (number_phone) VALUES (?);";
+            sql = "INSERT INTO " + TABLE_NAME + " (" + NUMBER_PHONE + ", " + ID_PHONE_TYPE + ") VALUES (?, ?);";
             connected();
             smt = preparedInsert(sql);
             smt.setString(1, phone.getNumberPhone());
+            smt.setInt(2, phone.getPhoneType().getIdPhoneType());
             smt.executeUpdate();
             conn.commit();
             ResultSet rs = smt.getGeneratedKeys();
@@ -70,15 +76,15 @@ public class TelefoneDao extends ConnectionFactory {
     }
 
     public IPhone findById(int id) {
-        sql = "SELECT * FROM phone WHERE id_phone = ?";
+        sql = "SELECT * FROM " + TABLE_NAME + " WHERE " + ID_PHONE + " = ?";
         try {
             prepared(sql);
             smt.setInt(1, id);
             rs = smt.executeQuery();
             while (rs.next()) {
                 Phone phone = new Phone();
-                phone.setIdPhone(rs.getInt(COLUMNS_SQL[0]));
-                phone.setNumberPhone(rs.getString(COLUMNS_SQL[1]));
+                phone.setIdPhone(rs.getInt(ID_PHONE));
+                phone.setNumberPhone(rs.getString(NUMBER_PHONE));
                 return phone;
             }
         } catch (Exception e) {
@@ -90,15 +96,15 @@ public class TelefoneDao extends ConnectionFactory {
     }
 
     public IPhone findByNumber(String number) {
-        sql = "SELECT * FROM phone WHERE number_phone = ?";
+        sql = "SELECT * FROM " + TABLE_NAME + " WHERE " + NUMBER_PHONE + " = ?";
         try {
             prepared(sql);
             smt.setString(1, number);
             rs = smt.executeQuery();
             while (rs.next()) {
                 Phone phone = new Phone();
-                phone.setIdPhone(rs.getInt(COLUMNS_SQL[0]));
-                phone.setNumberPhone(rs.getString(COLUMNS_SQL[1]));
+                phone.setIdPhone(rs.getInt(ID_PHONE));
+                phone.setNumberPhone(rs.getString(NUMBER_PHONE));
                 return phone;
             }
         } catch (Exception e) {
