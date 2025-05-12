@@ -24,7 +24,7 @@ public class PhoneTypeDao extends ConnectionFactory {
             sql = "CREATE TABLE IF NOT EXISTS "+TABLE_NAME+" ("
                     + ID_PHONE_TYPE+" INTEGER PRIMARY KEY AUTOINCREMENT, "
                     + NAME_PHONE_TYPE+" TEXT NOT NULL UNIQUE"
-                    + ")";
+                    + ")";            
             exec(sql);
             conn.commit();
         }catch(Exception e){
@@ -43,7 +43,7 @@ public class PhoneTypeDao extends ConnectionFactory {
     
     public int insert(IPhoneType phoneType){
         try {
-            sql = "INSERT INTO "+ TABLE_NAME +" ("+ NAME_PHONE_TYPE +") VALUES (?);";
+            sql = "INSERT INTO "+ TABLE_NAME +" ("+ NAME_PHONE_TYPE +") VALUES (?);";            
             preparedInsert(sql);
             smt.setString(1, phoneType.getNamePhoneType());
             smt.executeUpdate();
@@ -60,10 +60,30 @@ public class PhoneTypeDao extends ConnectionFactory {
         throw new PhoneException("Erro ao adicionar novo tipo de telefone!");
     }
     
+    public IPhoneType findById(int id){
+        IPhoneType phoneType;
+        try {
+            sql = "SELECT * FROM "+ TABLE_NAME+" WHERE "+ ID_PHONE_TYPE +" = "+ id;
+            prepared(sql);
+            rs = smt.executeQuery();
+            while(rs.next()){
+                PhoneType type = new PhoneType();
+                type.setIdPhoneType(rs.getInt(ID_PHONE_TYPE));
+                type.setNamePhoneType(rs.getString(NAME_PHONE_TYPE));
+                return type;
+            }
+        } catch (Exception e) {
+            throw new PhoneException("Erro ao buscar os tipos de telefones por ID!", e);
+        }finally{
+            desconect();
+        }
+        throw new PhoneException("Tipos de telefones não existe!");
+    }
+    
     public List<IPhoneType> findAll(){
         List<IPhoneType> list = new ArrayList<>();
         try {
-            sql = "SELECT * FROM "+ TABLE_NAME;
+            sql = "SELECT * FROM "+ TABLE_NAME+" ORDER BY "+ NAME_PHONE_TYPE;
             prepared(sql);
             rs = smt.executeQuery();
             while(rs.next()){
