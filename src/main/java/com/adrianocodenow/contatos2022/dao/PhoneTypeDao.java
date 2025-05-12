@@ -2,6 +2,7 @@ package com.adrianocodenow.contatos2022.dao;
 
 import com.adrianocodenow.contatos2022.exceptions.PhoneException;
 import com.adrianocodenow.contatos2022.factory.ConnectionFactory;
+import com.adrianocodenow.contatos2022.interfaces.IPhoneType;
 import java.util.Objects;
 
 /**
@@ -11,14 +12,15 @@ import java.util.Objects;
 public class PhoneTypeDao extends ConnectionFactory {
     
     private static PhoneTypeDao instance;
+    private static String TABLE_NAME = "tb_phone_type";
     public final static String ID_PHONE_TYPE = "id_phone_type";
     public final static String NAME_PHONE_TYPE = "name_phone_type";
 
     private PhoneTypeDao() {
         try{
-            sql = "CREATE TABLE IF NOT EXISTS tb_phone_type ("
-                    + "id_phone_type INTEGER PRIMARY KEY AUTOINCREMENT, "
-                    + "name_phone_type TEXT NOT NULL UNIQUE"
+            sql = "CREATE TABLE IF NOT EXISTS "+TABLE_NAME+" ("
+                    + ID_PHONE_TYPE+" INTEGER PRIMARY KEY AUTOINCREMENT, "
+                    + NAME_PHONE_TYPE+" TEXT NOT NULL UNIQUE"
                     + ")";
             exec(sql);
             conn.commit();
@@ -36,6 +38,23 @@ public class PhoneTypeDao extends ConnectionFactory {
         return instance;
     }
     
-    
+    public int insert(IPhoneType phoneType){
+        try {
+            sql = "INSERT INTO "+ TABLE_NAME +" ("+ NAME_PHONE_TYPE +") VALUES (?);";
+            preparedInsert(sql);
+            smt.setString(1, phoneType.getNamePhoneType());
+            smt.executeUpdate();
+            conn.commit();
+            rs = smt.getGeneratedKeys();
+            if(rs.next()){
+                return rs.getInt(1);
+            }
+        } catch (Exception e) {
+            throw new PhoneException("Erro ao adicionar novo tipo de telefone!", e);
+        }finally{
+            desconect();
+        }
+        throw new PhoneException("Erro ao adicionar novo tipo de telefone!");
+    }
     
 }
