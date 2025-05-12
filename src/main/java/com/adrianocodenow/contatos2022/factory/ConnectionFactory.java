@@ -7,6 +7,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.sqlite.SQLiteConfig;
@@ -29,7 +30,7 @@ public class ConnectionFactory {
             SQLiteConfig config = new SQLiteConfig();
             config.enforceForeignKeys(true);
             db = DriverManager.getConnection(
-                    "jdbc:sqlite:" + bancoDeDados + ".sqlite",
+                    "jdbc:sqlite:" + bancoDeDados,
                     config.toProperties()
             );
         } catch (SQLException e) {
@@ -39,7 +40,7 @@ public class ConnectionFactory {
         }
         return db;
     }
-    
+
     public static void fecha(Connection db) {
         try {
             if (db != null) {
@@ -52,7 +53,7 @@ public class ConnectionFactory {
 
     public static Connection connected() throws SQLException {
 
-        String url = "jdbc:sqlite:"+ Config.BANCO_DE_DADOS;
+        String url = "jdbc:sqlite:" + Config.BANCO_DE_DADOS;
         try {
             Class.forName("org.sqlite.JDBC");
             SQLiteConfig config = new SQLiteConfig();
@@ -66,24 +67,29 @@ public class ConnectionFactory {
     }
 
     public static void begin() throws SQLException {
-        connected();
+        if (Objects.isNull(conn)) {
+            throw new ConexaoException("Conexão fechada!");
+        }
         conn.beginRequest();
     }
 
     public static void rollback() throws SQLException {
+        if (Objects.isNull(conn)) {
+            throw new ConexaoException("Conexão fechada!");
+        }
         conn.rollback();
     }
 
     public static boolean desconect() {
         try {
-            if (conn != null && !conn.isClosed()) {
+            if (Objects.isNull(conn) && !conn.isClosed()) {
                 conn.close();
                 conn = null;
             }
-            if (smt != null && !smt.isClosed()) {
+            if (Objects.isNull(smt) && !smt.isClosed()) {
                 smt.close();
             }
-            if (rs != null && !rs.isClosed()) {
+            if (Objects.isNull(rs) && !rs.isClosed()) {
                 rs.close();
             }
         } catch (SQLException e) {
@@ -93,19 +99,23 @@ public class ConnectionFactory {
     }
 
     public static PreparedStatement prepared(String sql) throws SQLException {
+        hasConnected();// Verifica se existe conexão
         return smt = conn.prepareStatement(sql);
     }
-    
+
     public static PreparedStatement preparedInsert(String sql) throws SQLException {
+        hasConnected();// Verifica se existe conexão
         return smt = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
     }
 
     public static boolean exec(String sql) throws SQLException {
-        if (conn == null) {
+        hasConnected();// Verifica se existe conexão
+        return conn.prepareStatement(sql).execute();
+    }
+    
+    private static void hasConnected() throws SQLException{
+        if (Objects.isNull(conn)) {
             connected();
         }
-        boolean b = conn.prepareStatement(sql).execute();
-        desconect();
-        return b;
-    }   
+    }
 }
