@@ -95,6 +95,10 @@ public class ConnectionFactory {
     public static PreparedStatement prepared(String sql) throws SQLException {
         return smt = conn.prepareStatement(sql);
     }
+    
+    public static PreparedStatement preparedInsert(String sql) throws SQLException {
+        return smt = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
+    }
 
     public static boolean exec(String sql) throws SQLException {
         if (conn == null) {

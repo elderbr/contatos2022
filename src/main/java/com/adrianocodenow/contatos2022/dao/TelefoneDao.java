@@ -14,8 +14,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -24,18 +22,18 @@ import java.util.logging.Logger;
 public class TelefoneDao extends ConnectionFactory {
 
     private static TelefoneDao instance;
-    private static final String CREATE_TABLE = "CREATE TABLE IS NOT EXIST telefone ("
+    private static final String TABLE_NAME = "phone";
+    private static final String CREATE_TABLE = "CREATE TABLE IS NOT EXIST phone ("
             + "id_phone INTEGER PRIMARY KEY NOT NUL, "
             + "number_phone TEXT NOT NULL UNIQUE"
             + ");";
-
     private static final String[] COLUMNS_SQL = {"id_phone", "number_phone"};
 
     private TelefoneDao() {
         try {
             exec(CREATE_TABLE);
         } catch (SQLException ex) {
-            throw new ConexaoException("Erro ao criar a tabela telefone!", ex);
+            throw new ConexaoException("Erro ao criar a tabela phone!", ex);
         } finally {
             desconect();
         }
@@ -50,15 +48,15 @@ public class TelefoneDao extends ConnectionFactory {
 
     public static int insert(IPhone phone) {
         try {
-            String sql
-                    = "INSERT INTO "
-                    + "telefones(" + COLUMNS_SQL + ") "
-                    + "VALUES(?, ?)";
-            prepared(sql);
-            smt.setString(0, phone.getNumberPhone());
+            String sql = "INSERT INTO phone (number_phone) VALUES (?);";
+            preparedInsert(sql);
+            smt.setString(1, phone.getNumberPhone());
             smt.executeUpdate();
             ResultSet rs = smt.getGeneratedKeys();
-            return rs.getInt(0);
+            if(rs.next()){
+                return rs.getInt(1);
+            }
+            throw new PhoneException("Erro ao adicionar novo telefone!");
         } catch (Exception e) {
             throw new PhoneException("Erro ao adicionar novo telefone!", e);
         }
