@@ -5,6 +5,7 @@ import com.adrianocodenow.contatos2022.exceptions.ConexaoException;
 import com.adrianocodenow.contatos2022.exceptions.PhoneException;
 import com.adrianocodenow.contatos2022.factory.ConnectionFactory;
 import com.adrianocodenow.contatos2022.interfaces.IPhone;
+import com.adrianocodenow.contatos2022.model.Phone;
 import com.adrianocodenow.contatos2022.model.Telefone;
 import com.adrianocodenow.contatos2022.utils.Msg;
 
@@ -48,7 +49,7 @@ public class TelefoneDao extends ConnectionFactory {
         return instance;
     }
 
-    public static int insert(IPhone phone) {
+    public int insert(IPhone phone) {
         try {
             String sql = "INSERT INTO phone (number_phone) VALUES (?);";
             connected();
@@ -63,7 +64,29 @@ public class TelefoneDao extends ConnectionFactory {
             throw new PhoneException("Erro ao adicionar novo telefone!");
         } catch (Exception e) {
             throw new PhoneException("Erro ao adicionar novo telefone!", e);
+        }finally{
+            desconect();
         }
+    }
+    
+    public IPhone findById(int id){
+        sql = "SELECT * FROM phone WHERE id_phone = ?";
+        try {
+            prepared(sql);
+            smt.setInt(1, id);
+            rs = smt.executeQuery();
+            while(rs.next()){
+                Phone phone = new Phone();
+                phone.setIdPhone(rs.getInt(COLUMNS_SQL[0]));
+                phone.setNumberPhone(rs.getString(COLUMNS_SQL[1]));
+                return phone;
+            }
+        } catch (Exception e) {
+            throw new PhoneException("Erro ao buscar o telefone!", e);
+        }finally{
+            desconect();
+        }
+        throw new PhoneException("Erro ao buscar o telefone com o ID "+ id);
     }
 
     public static boolean insere(Telefone objTelefone) {
