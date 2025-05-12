@@ -11,6 +11,18 @@ public class Phone implements IPhone {
     private int id;
     private String number;
 
+    public Phone() {
+    }
+
+    public Phone(String number) {
+        this.number = number;
+    }
+    
+    public Phone(int id, String number) {
+        this.id = id;
+        this.number = number;
+    }
+
     @Override
     public Phone setIdPhone(int id) {
         this.id = id;
