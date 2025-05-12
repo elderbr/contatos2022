@@ -82,14 +82,14 @@ public class ConnectionFactory {
 
     public static boolean desconect() {
         try {
-            if (Objects.isNull(conn) && !conn.isClosed()) {
+            if (!Objects.isNull(conn) && !conn.isClosed()) {
                 conn.close();
                 conn = null;
             }
-            if (Objects.isNull(smt) && !smt.isClosed()) {
+            if (!Objects.isNull(smt) && !smt.isClosed()) {
                 smt.close();
             }
-            if (Objects.isNull(rs) && !rs.isClosed()) {
+            if (!Objects.isNull(rs) && !rs.isClosed()) {
                 rs.close();
             }
         } catch (SQLException e) {
