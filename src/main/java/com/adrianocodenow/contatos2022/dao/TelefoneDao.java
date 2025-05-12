@@ -6,6 +6,7 @@ import com.adrianocodenow.contatos2022.exceptions.PhoneException;
 import com.adrianocodenow.contatos2022.factory.ConnectionFactory;
 import com.adrianocodenow.contatos2022.interfaces.IPhone;
 import com.adrianocodenow.contatos2022.model.Telefone;
+import com.adrianocodenow.contatos2022.utils.Msg;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -23,8 +24,8 @@ public class TelefoneDao extends ConnectionFactory {
 
     private static TelefoneDao instance;
     private static final String TABLE_NAME = "phone";
-    private static final String CREATE_TABLE = "CREATE TABLE IS NOT EXIST phone ("
-            + "id_phone INTEGER PRIMARY KEY NOT NUL, "
+    private static final String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS phone ("
+            + "id_phone INTEGER PRIMARY KEY AUTOINCREMENT, "
             + "number_phone TEXT NOT NULL UNIQUE"
             + ");";
     private static final String[] COLUMNS_SQL = {"id_phone", "number_phone"};
@@ -32,10 +33,11 @@ public class TelefoneDao extends ConnectionFactory {
     private TelefoneDao() {
         try {
             exec(CREATE_TABLE);
+            conn.commit();
         } catch (SQLException ex) {
             throw new ConexaoException("Erro ao criar a tabela phone!", ex);
         } finally {
-            desconect();
+            desconect();            
         }
     }
 
@@ -49,9 +51,11 @@ public class TelefoneDao extends ConnectionFactory {
     public static int insert(IPhone phone) {
         try {
             String sql = "INSERT INTO phone (number_phone) VALUES (?);";
-            preparedInsert(sql);
+            connected();
+            smt = preparedInsert(sql);
             smt.setString(1, phone.getNumberPhone());
             smt.executeUpdate();
+            conn.commit();
             ResultSet rs = smt.getGeneratedKeys();
             if(rs.next()){
                 return rs.getInt(1);
