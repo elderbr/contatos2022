@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.adrianocodenow.contatos2022.controller;
 
 /**
@@ -10,5 +6,5 @@ package com.adrianocodenow.contatos2022.controller;
  */
 public class Config {
 
-    public static final String BANCO_DE_DADOS = "contatos2022";   
+    public static final String BANCO_DE_DADOS = "contatos2022.db";
 }
