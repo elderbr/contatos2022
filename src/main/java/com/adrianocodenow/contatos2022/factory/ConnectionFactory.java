@@ -92,6 +92,7 @@ public class ConnectionFactory {
             if (!Objects.isNull(rs) && !rs.isClosed()) {
                 rs.close();
             }
+            sql = null;
         } catch (SQLException e) {
             throw new ConexaoException("Erro ao fechar as conexões do banco!!!", "desconect()", e);
         }
@@ -100,20 +101,29 @@ public class ConnectionFactory {
 
     public static PreparedStatement prepared(String sql) throws SQLException {
         hasConnected();// Verifica se existe conexão
+        printQuery();
         return smt = conn.prepareStatement(sql);
     }
 
     public static PreparedStatement preparedInsert(String sql) throws SQLException {
         hasConnected();// Verifica se existe conexão
+        printQuery();
         return smt = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
     }
 
     public static boolean exec(String sql) throws SQLException {
         hasConnected();// Verifica se existe conexão
+        printQuery();
         return conn.prepareStatement(sql).execute();
     }
-    
-    private static void hasConnected() throws SQLException{
+
+    public static void printQuery() {
+        if (!Objects.isNull(sql)) {
+            System.out.println("Query: " + sql);
+        }
+    }
+
+    private static void hasConnected() throws SQLException {
         if (Objects.isNull(conn)) {
             connected();
         }
