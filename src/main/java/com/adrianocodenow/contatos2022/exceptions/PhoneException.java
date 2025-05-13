@@ -1,6 +1,7 @@
 package com.adrianocodenow.contatos2022.exceptions;
 
 import com.adrianocodenow.contatos2022.interfaces.IPhone;
+import com.adrianocodenow.contatos2022.utils.Msg;
 import java.util.Objects;
 
 /**
@@ -32,7 +33,8 @@ public class PhoneException extends RuntimeException {
     }
 
     @Override
-    public String toString() {
+    public String getMessage() {
+        System.err.println("PhoneException: "+ msg);
         return msg;
     }
 
