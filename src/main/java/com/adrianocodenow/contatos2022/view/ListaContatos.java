@@ -1,6 +1,7 @@
 package com.adrianocodenow.contatos2022.view;
 
 import com.adrianocodenow.contatos2022.controller.ContatoCtrl;
+import com.adrianocodenow.contatos2022.controller.PhoneCtrl;
 import com.adrianocodenow.contatos2022.controller.PhoneTypeCtrl;
 import com.adrianocodenow.contatos2022.controller.TelefoneCtrl;
 import com.adrianocodenow.contatos2022.controller.TipoTelefoneCtrl;
@@ -48,11 +49,11 @@ public class ListaContatos extends javax.swing.JFrame {
     private EnderecoDao enderecoDao = new EnderecoDao();
     private List<Endereco> listEndereco = new ArrayList<>();
 
+    // TELEFONE
+    private PhoneCtrl phoneCtrl;
     // TIPO DE TELEFONE
     private IPhoneType phoneType;
     private PhoneTypeCtrl phoneTypeCtrl = PhoneTypeCtrl.getInstance();
-    private TipoTelefone tipoTelefone;
-    private TipoTelefoneDao tipoTelefoneDao = new TipoTelefoneDao();
     private PhoneTypeRender phoneTypeRender = new PhoneTypeRender();
 
     public ListaContatos() {
@@ -68,6 +69,8 @@ public class ListaContatos extends javax.swing.JFrame {
         // TIPO ENDEREÇO
         loadTipoEnderco();
 
+        // PHONE
+        phoneCtrl = PhoneCtrl.getInstance();
         // TIPO DE TELEFONE        
         lstTiposTelefones.setModel(phoneTypeCtrl);
         lstTiposTelefones.setCellRenderer(phoneTypeRender);
@@ -716,6 +719,9 @@ public class ListaContatos extends javax.swing.JFrame {
         btnAddPhone.setText("+ Tel");
         btnAddPhone.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnAddPhone.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnAddPhoneMouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 btnAddPhoneMouseEntered(evt);
             }
@@ -895,7 +901,15 @@ public class ListaContatos extends javax.swing.JFrame {
                 Msg.Aviso(rootPane, e.getMessage());
             }
             break;
-        }
+            case ADDTELEFONE:
+                try {
+                phoneCtrl.save(edtTelefone, phoneType);                
+                Msg.Aviso(rootPane, "Novo telefone adicionado com sucesso");
+            } catch (Exception e) {
+                Msg.Aviso(rootPane, e.getMessage());
+            }
+            break;
+        }        
         desativaOKCancel();
     }//GEN-LAST:event_btnOKActionPerformed
 
@@ -1179,6 +1193,12 @@ public class ListaContatos extends javax.swing.JFrame {
         LabelCustom.isAddButton(lblEditTipoTelefone, false);
     }//GEN-LAST:event_lblEditTipoTelefoneMouseExited
 
+    private void btnAddPhoneMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAddPhoneMouseClicked
+        edtTelefone.setText("");
+        edtTelefone.setEnabled(true);
+        ativaOKCancel(evento.ADDTELEFONE, "Clique OK para adicionar telefone!");
+    }//GEN-LAST:event_btnAddPhoneMouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -1334,6 +1354,10 @@ public class ListaContatos extends javax.swing.JFrame {
         evento = Evento.NULL;
 
         // Telefone
+        edtTelefone.setText("");
+        edtTelefone.setEnabled(false);
+        
+        // TIPO TELEFONE
         edtTipoTelefone.setVisible(false);
         lblDelTipoTelefone.setVisible(false);
         phoneType = null;
@@ -1611,9 +1635,9 @@ public class ListaContatos extends javax.swing.JFrame {
         edtPais.setEnabled(false);
         edtTelefone.setEnabled(false);
         edtTipoEndereco.setVisible(false);
-        
+
         // Telefone
-        edtTipoTelefone.setVisible(false);        
+        edtTipoTelefone.setVisible(false);
         lblDelTipoTelefone.setVisible(false);
 //        lstTipoEnderecos.setEnabled(false);
         lstTelefones.setVisible(false);
