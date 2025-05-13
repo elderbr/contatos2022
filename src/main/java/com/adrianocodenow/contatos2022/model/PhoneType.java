@@ -14,6 +14,10 @@ public class PhoneType implements IPhoneType {
     public PhoneType() {
     }
 
+    public PhoneType(String name) {
+        this.name = name;
+    }   
+
     @Override
     public PhoneType setIdPhoneType(int id) {
         this.id = id;
