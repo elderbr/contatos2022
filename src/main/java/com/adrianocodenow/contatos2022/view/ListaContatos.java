@@ -910,7 +910,7 @@ public class ListaContatos extends javax.swing.JFrame {
             }
             break;
         }        
-        desativaOKCancel();
+        //desativaOKCancel();
     }//GEN-LAST:event_btnOKActionPerformed
 
     private void edtNomeKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_edtNomeKeyReleased
