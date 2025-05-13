@@ -52,6 +52,19 @@ public class PhoneTypeCtrl extends DefaultListModel<IPhoneType> {
         fireContentsChanged(this, listType.size()-1, listType.size()-1);
     }
 
+    
+    public void delete(@NotNull IPhoneType phoneType) {
+        if(Objects.isNull(phoneType) || phoneType.getIdPhoneType() < 1){
+            throw new PhoneException("Tipo de telefone inválido!");
+        }
+        dao.findById(phoneType.getIdPhoneType());        
+        dao.delete(phoneType);
+        listType.remove(phoneType);        
+        fireContentsChanged(this, listType.size()-1, listType.size()-1);
+    }
+    
+    
+
     @Override
     public IPhoneType getElementAt(int index) {
         phoneType = listType.get(index);

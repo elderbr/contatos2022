@@ -49,6 +49,7 @@ public class ListaContatos extends javax.swing.JFrame {
     private List<Endereco> listEndereco = new ArrayList<>();
 
     // TIPO DE TELEFONE
+    private IPhoneType phoneType;
     private PhoneTypeCtrl phoneTypeCtrl = PhoneTypeCtrl.getInstance();
     private TipoTelefone tipoTelefone;
     private TipoTelefoneDao tipoTelefoneDao = new TipoTelefoneDao();
@@ -967,8 +968,9 @@ public class ListaContatos extends javax.swing.JFrame {
     }//GEN-LAST:event_lblEditTelefoneMouseReleased
 
     private void lstTiposTelefonesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lstTiposTelefonesMouseClicked
-
-
+        phoneType = lstTiposTelefones.getSelectedValue();
+        lblDelTipoTelefone.setVisible(true);
+        btnCancel.setEnabled(true);
     }//GEN-LAST:event_lstTiposTelefonesMouseClicked
 
     private void lstTelefonesKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_lstTelefonesKeyReleased
@@ -1145,6 +1147,16 @@ public class ListaContatos extends javax.swing.JFrame {
 
     private void lblDelTipoTelefoneMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblDelTipoTelefoneMouseClicked
         edtTipoTelefone.setVisible(false);
+        try {
+            int options = Msg.Options(rootPane, "Gostaria de apagar o tipo de telefone?");
+            if (options == 0) {
+                phoneTypeCtrl.delete(phoneType);
+                Msg.Aviso(rootPane, "Foi removido o tipo de telefone " + phoneType.getNamePhoneType());
+                limpaTodosCampos();
+            }
+        } catch (Exception e) {
+            Msg.Aviso(rootPane, e.getMessage());
+        }
     }//GEN-LAST:event_lblDelTipoTelefoneMouseClicked
 
     private void lblDelTipoTelefoneMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblDelTipoTelefoneMouseEntered
@@ -1323,6 +1335,8 @@ public class ListaContatos extends javax.swing.JFrame {
 
         // Telefone
         edtTipoTelefone.setVisible(false);
+        lblDelTipoTelefone.setVisible(false);
+        phoneType = null;
     }
 
     private void loadList() {
@@ -1597,7 +1611,10 @@ public class ListaContatos extends javax.swing.JFrame {
         edtPais.setEnabled(false);
         edtTelefone.setEnabled(false);
         edtTipoEndereco.setVisible(false);
-        edtTipoTelefone.setVisible(false);
+        
+        // Telefone
+        edtTipoTelefone.setVisible(false);        
+        lblDelTipoTelefone.setVisible(false);
 //        lstTipoEnderecos.setEnabled(false);
         lstTelefones.setVisible(false);
 //        lstTiposTelefones.setEnabled(false);

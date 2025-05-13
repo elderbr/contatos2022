@@ -100,4 +100,17 @@ public class PhoneTypeDao extends ConnectionFactory {
         }
     }
     
+    public void delete(IPhoneType phoneType){
+        try {
+            sql = "DELETE FROM "+ TABLE_NAME + " WHERE "+ ID_PHONE_TYPE +" = "+ phoneType.getIdPhoneType();
+            prepared(sql);            
+            smt.executeUpdate();
+            conn.commit();
+        } catch (Exception e) {
+            throw new PhoneException("Erro ao deletar o tipo de telefone!", e);
+        }finally{
+            desconect();
+        }
+    }
+    
 }

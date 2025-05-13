@@ -23,5 +23,12 @@ public interface IPhoneType {
         } catch (Exception e) {
             throw new PhoneException("Erro ao converter a classe "+ clazz.getSimpleName());
         }
-    }    
+    }
+    
+    default String toPrint(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("ID: ").append(getIdPhoneType()).append("\n");
+        sb.append("Name: ").append(getNamePhoneType()).append("\n");
+        return sb.toString();
+    }
 }

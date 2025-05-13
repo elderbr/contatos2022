@@ -7,6 +7,8 @@ import org.jetbrains.annotations.NotNull;
  * @author ElderBR
  */
 public class Msg {
+    
+    private static final String TITLE = "A V I S O";
 
     public static void Server(@NotNull String msg, @NotNull Class classe) {
         System.out.println(msg+" - Class: "+classe.getSimpleName());
@@ -23,6 +25,10 @@ public class Msg {
     
     public static void Aviso(Component parentComponent, String msg){
         JOptionPane.showMessageDialog(parentComponent, msg, "AVISO", JOptionPane.INFORMATION_MESSAGE);
+    }
+    
+    public static int Options(Component component, String question){
+        return JOptionPane.showConfirmDialog(component, question, TITLE, JOptionPane.YES_NO_OPTION);
     }
     
     public static void Erro(Component component, String msg, Exception e){
