@@ -345,7 +345,7 @@
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="lblDelTipoTelefone" min="-2" pref="30" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="lblEditTipoTelefone" min="-2" max="-2" attributes="0"/>
+                          <Component id="lblEditTipoTelefone" min="-2" pref="50" max="-2" attributes="0"/>
                       </Group>
                       <Component id="scrpTiposTelefones" alignment="0" max="32767" attributes="0"/>
                   </Group>
@@ -359,7 +359,7 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jLabel12" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="lblEditTipoTelefone" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="lblEditTipoTelefone" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
                       <Component id="lblDelTipoTelefone" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
                       <Component id="lblAddTipoTelefone" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
                   </Group>
@@ -386,10 +386,17 @@
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Arial" size="14" style="0"/>
             </Property>
+            <Property name="horizontalAlignment" type="int" value="0"/>
             <Property name="text" type="java.lang.String" value="Edit"/>
+            <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+              <Color id="Hand Cursor"/>
+            </Property>
+            <Property name="opaque" type="boolean" value="true"/>
           </Properties>
           <Events>
-            <EventHandler event="mouseReleased" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="lblEditTipoTelefoneMouseReleased"/>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="lblEditTipoTelefoneMouseClicked"/>
+            <EventHandler event="mouseEntered" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="lblEditTipoTelefoneMouseEntered"/>
+            <EventHandler event="mouseExited" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="lblEditTipoTelefoneMouseExited"/>
           </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="lblDelTipoTelefone">
@@ -399,8 +406,15 @@
             </Property>
             <Property name="horizontalAlignment" type="int" value="0"/>
             <Property name="text" type="java.lang.String" value="-"/>
+            <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+              <Color id="Hand Cursor"/>
+            </Property>
+            <Property name="opaque" type="boolean" value="true"/>
           </Properties>
           <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="lblDelTipoTelefoneMouseClicked"/>
+            <EventHandler event="mouseEntered" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="lblDelTipoTelefoneMouseEntered"/>
+            <EventHandler event="mouseExited" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="lblDelTipoTelefoneMouseExited"/>
             <EventHandler event="mouseReleased" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="lblDelTipoTelefoneMouseReleased"/>
           </Events>
         </Component>
@@ -411,9 +425,15 @@
             </Property>
             <Property name="horizontalAlignment" type="int" value="0"/>
             <Property name="text" type="java.lang.String" value="+"/>
+            <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+              <Color id="Hand Cursor"/>
+            </Property>
+            <Property name="opaque" type="boolean" value="true"/>
           </Properties>
           <Events>
             <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="lblAddTipoTelefoneMouseClicked"/>
+            <EventHandler event="mouseEntered" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="lblAddTipoTelefoneMouseEntered"/>
+            <EventHandler event="mouseExited" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="lblAddTipoTelefoneMouseExited"/>
           </Events>
         </Component>
         <Component class="javax.swing.JTextField" name="edtTipoTelefone">
