@@ -14,7 +14,9 @@ public class User implements IUser {
     private String lastName;
     private boolean status;
     private LocalDate dateCreation;
-    private LocalDate dateUpdated;
+
+    public User() {
+    }    
 
     @Override
     public User setDateCreation(LocalDate date) {
@@ -28,14 +30,8 @@ public class User implements IUser {
     }
 
     @Override
-    public User setDateUpdated() {
-        dateUpdated = LocalDate.now();
-        return this;
-    }
-
-    @Override
     public LocalDate getDateUpdated() {
-        return dateUpdated;
+        return LocalDate.now();
     }
 
     @Override
