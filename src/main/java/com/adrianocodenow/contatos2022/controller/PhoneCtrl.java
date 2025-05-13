@@ -40,11 +40,8 @@ public class PhoneCtrl {
             tfPhone.selectAll();
             throw new PhoneException("Número inválido");
         }
-        if(Objects.isNull(phoneType) || phoneType.getIdPhoneType() < 1){
-            tfPhone.requestFocus();
-            tfPhone.selectAll();
-            throw new PhoneException("Escolha o tipo de número");
-        }
+        PhoneException.validationType(phoneType);// Validando o tipo de telefone
+        
         Phone phone = new Phone();
         phone.setNumberPhone(number);
         phone.setPhoneType(phoneType);
