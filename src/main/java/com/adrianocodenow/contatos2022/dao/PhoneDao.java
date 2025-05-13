@@ -1,8 +1,5 @@
 package com.adrianocodenow.contatos2022.dao;
 
-import static com.adrianocodenow.contatos2022.dao.TelefoneDao.ID_PHONE;
-import static com.adrianocodenow.contatos2022.dao.TelefoneDao.ID_PHONE_TYPE;
-import static com.adrianocodenow.contatos2022.dao.TelefoneDao.NUMBER_PHONE;
 import com.adrianocodenow.contatos2022.exceptions.ConexaoException;
 import com.adrianocodenow.contatos2022.exceptions.PhoneException;
 import com.adrianocodenow.contatos2022.factory.ConnectionFactory;
@@ -25,8 +22,8 @@ import java.util.Objects;
  *
  * @author ElderBR
  */
-public class PhoneDao extends ConnectionFactory{
-    
+public class PhoneDao extends ConnectionFactory {
+
     private static PhoneDao instance;
     private static final String TABLE_NAME = "tb_phone";
     public static final String ID_PHONE = "id_phone";
@@ -39,7 +36,7 @@ public class PhoneDao extends ConnectionFactory{
             + "CONSTRAINT fk_phone_type REFERENCES tb_phone_type (" + ID_PHONE_TYPE + ") ON DELETE CASCADE"
             + ");";
     private static final String[] COLUMNS_SQL = {ID_PHONE, NUMBER_PHONE, ID_PHONE_TYPE};
-    
+
     private PhoneDao() {
         try {
             sql = CREATE_TABLE;
@@ -51,14 +48,14 @@ public class PhoneDao extends ConnectionFactory{
             desconect();
         }
     }
-    
+
     public static PhoneDao getInstance() {
         if (Objects.isNull(instance)) {
             instance = new PhoneDao();
         }
         return instance;
     }
-    
+
     public int insert(IPhone phone) {
         try {
             sql = "INSERT INTO " + TABLE_NAME + " (" + NUMBER_PHONE + ", " + ID_PHONE_TYPE + ") VALUES (?, ?);";
