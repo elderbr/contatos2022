@@ -16,9 +16,8 @@ public interface IUser extends IUserSimples{
     LocalDate getDateCreation();
     default String toDateCreation(){
         return getDateCreation().format(formatter);
-    }
+    }    
     
-    IUser setDateUpdated();
     LocalDate getDateUpdated();
     default String toDateUpdated(){
         return getDateUpdated().format(formatter);
