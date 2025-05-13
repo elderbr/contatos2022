@@ -16,10 +16,10 @@ public class LabelCustom {
 
     public static void isAddButton(JLabel label, boolean has) {
         if (has) {
-            label.setBackground(Color.GREEN);
-            label.setBorder(BorderFactory.createLineBorder(new Color(0, 85, 0), 2));
+            label.setBackground(Colors.Green());
+            label.setBorder(BorderFactory.createLineBorder(Colors.Dark_green(), 2));
         } else {
-            label.setBackground(new Color(213, 216, 222));
+            label.setBackground(Colors.BACKGROUND());
             label.setBorder(null);
         }
     }

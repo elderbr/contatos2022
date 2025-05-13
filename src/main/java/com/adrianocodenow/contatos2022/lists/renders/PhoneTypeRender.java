@@ -1,6 +1,7 @@
 package com.adrianocodenow.contatos2022.lists.renders;
 
 import com.adrianocodenow.contatos2022.interfaces.IPhoneType;
+import com.adrianocodenow.contatos2022.utils.Colors;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -27,10 +28,10 @@ public class PhoneTypeRender extends JLabel implements ListCellRenderer<IPhoneTy
         if(index % 2 == 0){
             setBackground(Color.white);
         }else{
-            setBackground(Color.GRAY);
+            setBackground(Colors.tbLine());
         }
         if(isSelected){
-            setBackground(Color.yellow);
+            setBackground(Colors.select());
         }
         return this;
     }
