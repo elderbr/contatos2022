@@ -51,14 +51,14 @@ public class UserDao extends ConnectionFactory {
                     + LAST_NAME_USER+", "
                     + STATUS_USER+", "
                     + DATE_CREATION_USER+", "
-                    + DATE_UPDATED_USER+", "
+                    + DATE_UPDATED_USER+""
                     + ") VALUES (?,?,?,?,?);";
+            smt = preparedInsert(sql);            
             smt.setString(1, user.getNameUser());
             smt.setString(2, user.getLastNameUser());
             smt.setBoolean(3, true);
             smt.setString(4, user.toDateCreation());
-            smt.setString(5, user.toDateUpdated());
-            preparedInsert(sql);
+            smt.setString(5, user.toDateUpdated());            
             smt.executeUpdate();
             conn.commit();
             rs = smt.getGeneratedKeys();
@@ -67,7 +67,7 @@ public class UserDao extends ConnectionFactory {
                 return user;
             }
             throw new UserException("Erro ao adicionar novo usuário!");
-        } catch (SQLException e) {
+        } catch (Exception e) {
             throw new UserException("Erro ao adicionar novo usuário!", e);
         }
     }
