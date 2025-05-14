@@ -88,6 +88,30 @@ public class UserDao extends ConnectionFactory {
         } finally {
             desconect();
         }
+        if(list.isEmpty()){
+            throw new UserException("Usuário não existe!");
+        }
+        return list.get(0);
+    }
+
+    public IUser findByNameFull(IUser user) {
+        try {
+            sql = "SELECT * FROM " + TABLE_NAME
+                    + " WHERE LOWER(" + NAME_USER + ") = LOWER(?)"
+                    + " AND LOWER(" + LAST_NAME_USER + ") = LOWER(?)";
+            prepared(sql);
+            smt.setString(1, user.getNameUser());
+            smt.setString(2, user.getLastNameUser());
+            rs = smt.executeQuery();
+            toUser();
+        } catch (SQLException e) {
+            throw new UserException("Erro ao buscar usuário pelo o nome e sobrenome!", e);
+        } finally {
+            desconect();
+        }
+        if(list.isEmpty()){
+            throw new UserException("Usuário não existe!");
+        }
         return list.get(0);
     }
 
