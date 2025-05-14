@@ -35,35 +35,48 @@ public class UserCtrl extends DefaultListModel<IUser> {
     }
 
     public void save(JTextField tfName, JTextField tfLastName) {
-        if (Objects.isNull(tfName)) {
-            throw new UserException("Campo nome obrigatório!");
-        }
-        String name = tfName.getText().trim();
-        if (name.isBlank() || name.length() < 3) {
-            throw new UserException("Campo nome obrigatório e não pode conter menos de 2 letras!");
-        }
-        if (Objects.isNull(tfLastName)) {
-            throw new UserException("Campo sobrenome obrigatório!");
-        }
-        String lastName = tfLastName.getText().trim();
-        if (lastName.isBlank() || lastName.length() < 3) {
-            throw new UserException("Campo sobrenome obrigatório e não pode conter menos de 2 letras!");
-        }
+        validetion(tfName, tfLastName);        
         
-        // Criando novo usuário
-        User user = new User();
-        user.setNameUser(name);
-        user.setLastNameUser(lastName);
-        user.setDateCreation(LocalDate.now());
+        if(Objects.isNull(user)){
+            throw new UserException("Usuário inválido!");
+        }
 
         // Verifica se o usuário existe
         if (!Objects.isNull(userDao.findByNameFull(user))) {
             throw new UserException("Usuário já existe!");
-        }
+        }        
         
         // Atualizando a lista
         userDao.insert(user);
         findAll();                
+        fireContentsChanged(this, list.size() - 1, list.size() - 1);
+        
+        // Limpando os campos
+        tfName.setText("");
+        tfLastName.setText("");
+        tfName.requestFocus();
+    }
+    
+    public void update(IUser userForm, JTextField tfName, JTextField tfLastName) {
+        if(Objects.isNull(userForm)){
+            throw new UserException("Usuário inválido!");
+        }
+        
+        validetion(tfName, tfLastName);        
+        
+        if(Objects.isNull(user)){
+            throw new UserException("Usuário inválido!");
+        }
+
+        // Verifica se o usuário existe        
+        if (Objects.isNull(userDao.findById(userForm.getIdUser()))) {
+            throw new UserException("Usuário não existe!");
+        }
+        user.setIdUser(userForm.getIdUser());
+        
+        // Atualizando a lista
+        userDao.update(user);
+        findAll();// Busca todos os usuarios
         fireContentsChanged(this, list.size() - 1, list.size() - 1);
         
         // Limpando os campos
@@ -84,6 +97,29 @@ public class UserCtrl extends DefaultListModel<IUser> {
         tfName.setText(user.getNameUser());
         tfLastName.setEnabled(true);
         tfLastName.setText(user.getLastNameUser());
+    }
+    
+    private void validetion(JTextField tfName, JTextField tfLastName){
+        if (Objects.isNull(tfName)) {
+            throw new UserException("Campo nome obrigatório!");
+        }
+        String name = tfName.getText().trim();
+        if (name.isBlank() || name.length() < 3) {
+            throw new UserException("Campo nome obrigatório e não pode conter menos de 2 letras!");
+        }
+        if (Objects.isNull(tfLastName)) {
+            throw new UserException("Campo sobrenome obrigatório!");
+        }
+        String lastName = tfLastName.getText().trim();
+        if (lastName.isBlank() || lastName.length() < 3) {
+            throw new UserException("Campo sobrenome obrigatório e não pode conter menos de 2 letras!");
+        }
+        
+        // Criando novo usuário
+        user = new User();
+        user.setNameUser(name);
+        user.setLastNameUser(lastName);
+        user.setDateCreation(LocalDate.now());
     }
 
     @Override
