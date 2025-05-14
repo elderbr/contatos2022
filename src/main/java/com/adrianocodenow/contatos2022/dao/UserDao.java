@@ -89,7 +89,7 @@ public class UserDao extends ConnectionFactory {
         } finally {
             desconect();
         }
-        if(list.isEmpty()){
+        if (list.isEmpty()) {
             throw new UserException("Usuário não existe!");
         }
         return list.get(0);
@@ -110,7 +110,7 @@ public class UserDao extends ConnectionFactory {
         } finally {
             desconect();
         }
-        if(list.isEmpty()){
+        if (list.isEmpty()) {
             return null;
         }
         return list.get(0);
@@ -127,6 +127,26 @@ public class UserDao extends ConnectionFactory {
             throw new UserException("Erro ao buscar todos os usuários", e);
         } finally {
             desconect();
+        }
+    }
+
+    public void update(IUser user) {
+        try {
+            sql = "UPDATE " + TABLE_NAME + " SET "
+                    + NAME_USER + " = ?, "
+                    + LAST_NAME_USER + " = ?, "
+                    + DATE_UPDATED_USER + " = ? "
+                    + " WHERE " + ID_USER + " = ?";
+
+            prepared(sql);
+            smt.setString(1, user.getNameUser());
+            smt.setString(2, user.getLastNameUser());
+            smt.setString(3, user.toDateUpdated());
+            smt.setInt(4, user.getIdUser());
+            smt.executeUpdate();
+            conn.commit();
+        } catch (SQLException e) {
+            throw new UserException("Erro ao atualizar Usuário!", e);
         }
     }
 
