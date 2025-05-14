@@ -10,6 +10,7 @@ import com.adrianocodenow.contatos2022.dao.EnderecoDao;
 import com.adrianocodenow.contatos2022.dao.TelefoneDao;
 import com.adrianocodenow.contatos2022.dao.TipoEnderecoDao;
 import com.adrianocodenow.contatos2022.dao.TipoTelefoneDao;
+import com.adrianocodenow.contatos2022.dao.UserDao;
 import com.adrianocodenow.contatos2022.interfaces.IPhoneType;
 import com.adrianocodenow.contatos2022.interfaces.IUser;
 import com.adrianocodenow.contatos2022.lists.renders.PhoneTypeRender;
@@ -59,7 +60,12 @@ public class ListaContatos extends javax.swing.JFrame {
     private PhoneTypeCtrl phoneTypeCtrl = PhoneTypeCtrl.getInstance();
     private PhoneTypeRender phoneTypeRender = new PhoneTypeRender();
 
-    public ListaContatos() {        
+    public ListaContatos() { 
+        
+        UserDao userDao = UserDao.getInstance();
+        user = userDao.findById(3);
+        System.out.println("user: "+ user.getNameFullUser());
+        
         //CriaTabelas.criaBancoDeDados();
         initComponents();
         lblMensagem.setText("");

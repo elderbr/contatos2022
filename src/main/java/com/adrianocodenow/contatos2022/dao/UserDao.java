@@ -24,6 +24,7 @@ public class UserDao extends ConnectionFactory {
     private final String STATUS_USER = "status_user";
     private final String DATE_CREATION_USER = "date_created_user";
     private final String DATE_UPDATED_USER = "date_updated_user";
+    private List<IUser> list;
 
     private UserDao() {
         try {
@@ -47,26 +48,26 @@ public class UserDao extends ConnectionFactory {
         }
         return instance;
     }
-    
-    public IUser insert(IUser user){
+
+    public IUser insert(IUser user) {
         try {
-            sql = "INSERT INTO "+ TABLE_NAME+" ("
-                    + NAME_USER+", "
-                    + LAST_NAME_USER+", "
-                    + STATUS_USER+", "
-                    + DATE_CREATION_USER+", "
-                    + DATE_UPDATED_USER+""
+            sql = "INSERT INTO " + TABLE_NAME + " ("
+                    + NAME_USER + ", "
+                    + LAST_NAME_USER + ", "
+                    + STATUS_USER + ", "
+                    + DATE_CREATION_USER + ", "
+                    + DATE_UPDATED_USER + ""
                     + ") VALUES (?,?,?,?,?);";
-            smt = preparedInsert(sql);            
+            smt = preparedInsert(sql);
             smt.setString(1, user.getNameUser());
             smt.setString(2, user.getLastNameUser());
             smt.setBoolean(3, true);
             smt.setString(4, user.toDateCreation());
-            smt.setString(5, user.toDateUpdated());            
+            smt.setString(5, user.toDateUpdated());
             smt.executeUpdate();
             conn.commit();
             rs = smt.getGeneratedKeys();
-            if(rs.next()){
+            if (rs.next()) {
                 user.setIdUser(rs.getInt(1));
                 return user;
             }
@@ -75,25 +76,45 @@ public class UserDao extends ConnectionFactory {
             throw new UserException("Erro ao adicionar novo usuário!", e);
         }
     }
-    
-    public List<IUser> findAll(){
-        List<IUser> list = new ArrayList<>();
+
+    public IUser findById(int code) {
         try {
-            sql = "SELECT * FROM "+ TABLE_NAME+" ORDER BY "+ NAME_USER+ ", "+ LAST_NAME_USER;
+            sql = "SELECT * FROM " + TABLE_NAME + " WHERE " + ID_USER + " = " + code;
             prepared(sql);
             rs = smt.executeQuery();
-            while(rs.next()){
-                User user = new User();
-                user.setIdUser(rs.getInt(ID_USER));
-                user.setNameUser(rs.getString(NAME_USER));
-                user.setLastNameUser(rs.getString(LAST_NAME_USER));
-                user.setStatus(rs.getBoolean(STATUS_USER));
-                user.setDateCreation(LocalDate.now());
-                list.add(user);
-            }
+            toUser();
+        } catch (Exception e) {
+            throw new UserException("Erro ao buscar usuário pelo o ID", e);
+        } finally {
+            desconect();
+        }
+        return list.get(0);
+    }
+
+    public List<IUser> findAll() {
+        try {
+            sql = "SELECT * FROM " + TABLE_NAME + " ORDER BY " + NAME_USER + ", " + LAST_NAME_USER;
+            prepared(sql);
+            rs = smt.executeQuery();
+            toUser();
             return list;
         } catch (SQLException e) {
             throw new UserException("Erro ao buscar todos os usuários", e);
+        } finally {
+            desconect();
+        }
+    }
+
+    private void toUser() throws SQLException {
+        list = new ArrayList<>();
+        while (rs.next()) {
+            User user = new User();
+            user.setIdUser(rs.getInt(ID_USER));
+            user.setNameUser(rs.getString(NAME_USER));
+            user.setLastNameUser(rs.getString(LAST_NAME_USER));
+            user.setStatus(rs.getBoolean(STATUS_USER));
+            user.setDateCreation(LocalDate.now());
+            list.add(user);
         }
     }
 
