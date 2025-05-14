@@ -11,6 +11,7 @@ import com.adrianocodenow.contatos2022.dao.TelefoneDao;
 import com.adrianocodenow.contatos2022.dao.TipoEnderecoDao;
 import com.adrianocodenow.contatos2022.dao.TipoTelefoneDao;
 import com.adrianocodenow.contatos2022.interfaces.IPhoneType;
+import com.adrianocodenow.contatos2022.interfaces.IUser;
 import com.adrianocodenow.contatos2022.lists.renders.PhoneTypeRender;
 import com.adrianocodenow.contatos2022.model.Contato;
 import com.adrianocodenow.contatos2022.model.Endereco;
@@ -33,6 +34,8 @@ public class ListaContatos extends javax.swing.JFrame {
 
     private Evento evento;
 
+    // USER
+    private IUser user;
     private int idContato;
     private Contato contato;
     private ContatosDao contatoDao = new ContatosDao();
@@ -56,7 +59,7 @@ public class ListaContatos extends javax.swing.JFrame {
     private PhoneTypeCtrl phoneTypeCtrl = PhoneTypeCtrl.getInstance();
     private PhoneTypeRender phoneTypeRender = new PhoneTypeRender();
 
-    public ListaContatos() {
+    public ListaContatos() {        
         //CriaTabelas.criaBancoDeDados();
         initComponents();
         lblMensagem.setText("");

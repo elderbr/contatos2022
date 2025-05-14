@@ -3,7 +3,11 @@ package com.adrianocodenow.contatos2022.dao;
 import com.adrianocodenow.contatos2022.exceptions.UserException;
 import com.adrianocodenow.contatos2022.factory.ConnectionFactory;
 import com.adrianocodenow.contatos2022.interfaces.IUser;
+import com.adrianocodenow.contatos2022.model.User;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -69,6 +73,27 @@ public class UserDao extends ConnectionFactory {
             throw new UserException("Erro ao adicionar novo usuário!");
         } catch (Exception e) {
             throw new UserException("Erro ao adicionar novo usuário!", e);
+        }
+    }
+    
+    public List<IUser> findAll(){
+        List<IUser> list = new ArrayList<>();
+        try {
+            sql = "SELECT * FROM "+ TABLE_NAME+" ORDER BY "+ NAME_USER+ ", "+ LAST_NAME_USER;
+            prepared(sql);
+            rs = smt.executeQuery();
+            while(rs.next()){
+                User user = new User();
+                user.setIdUser(rs.getInt(ID_USER));
+                user.setNameUser(rs.getString(NAME_USER));
+                user.setLastNameUser(rs.getString(LAST_NAME_USER));
+                user.setStatus(rs.getBoolean(STATUS_USER));
+                user.setDateCreation(LocalDate.now());
+                list.add(user);
+            }
+            return list;
+        } catch (SQLException e) {
+            throw new UserException("Erro ao buscar todos os usuários", e);
         }
     }
 
