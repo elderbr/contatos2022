@@ -37,6 +37,7 @@ public class UserDao extends ConnectionFactory {
                     + DATE_UPDATED_USER + " TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP"
                     + ")";
             exec(sql);
+            conn.commit();
         } catch (SQLException e) {
             throw new UserException("Erro ao criar a tabela " + TABLE_NAME, e);
         }
@@ -110,7 +111,7 @@ public class UserDao extends ConnectionFactory {
             desconect();
         }
         if(list.isEmpty()){
-            throw new UserException("Usuário não existe!");
+            return null;
         }
         return list.get(0);
     }
