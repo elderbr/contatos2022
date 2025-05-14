@@ -14,6 +14,7 @@ import com.adrianocodenow.contatos2022.dao.TipoTelefoneDao;
 import com.adrianocodenow.contatos2022.interfaces.IPhoneType;
 import com.adrianocodenow.contatos2022.interfaces.IUser;
 import com.adrianocodenow.contatos2022.lists.renders.PhoneTypeRender;
+import com.adrianocodenow.contatos2022.lists.renders.UserRender;
 import com.adrianocodenow.contatos2022.model.Contato;
 import com.adrianocodenow.contatos2022.model.Endereco;
 import com.adrianocodenow.contatos2022.model.TipoEndereco;
@@ -70,6 +71,8 @@ public class ListaContatos extends javax.swing.JFrame {
         limpaTodosCampos();
 
         // User
+        lstContatos.setCellRenderer(new UserRender());
+        lstContatos.setModel(userCtrl);
         // CONTATO
         loadContato();
 
@@ -159,11 +162,6 @@ public class ListaContatos extends javax.swing.JFrame {
         jLabel2.setOpaque(true);
 
         lstContatos.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        lstContatos.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
         lstContatos.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 lstContatosMouseClicked(evt);
@@ -863,6 +861,8 @@ public class ListaContatos extends javax.swing.JFrame {
                 try {
                 userCtrl.save(edtNome, edtSobrenome);
                 Msg.Aviso(rootPane, "Novo usuário adicionado com sucesso!");
+                desativaCampos();
+                desativaOKCancel();
             } catch (Exception e) {
                 Msg.Aviso(rootPane, e.getMessage());
             }            
@@ -1130,17 +1130,7 @@ public class ListaContatos extends javax.swing.JFrame {
     }//GEN-LAST:event_lblEditTipoEnderecoMouseClicked
 
     private void lstContatosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lstContatosMouseClicked
-        if (!listContato.isEmpty()) {
-            contato = listContato.get(lstContatos.getSelectedIndex());
-            
-            ativaNomeSobrenome();
-            edtNome.setText(contato.getNome());
-            edtSobrenome.setText(contato.getSobrenome());
-            
-            tipoEndereco = null;
-            loadTipoEnderco();
-            desativaEndereco();
-        }
+        userCtrl.getSelected(lstContatos.getSelectedValue(), edtNome, edtSobrenome);
     }//GEN-LAST:event_lstContatosMouseClicked
 
     private void lstTiposEnderecosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lstTiposEnderecosMouseClicked
@@ -1298,7 +1288,7 @@ public class ListaContatos extends javax.swing.JFrame {
     private javax.swing.JLabel lblEditTipoEndereco;
     private javax.swing.JLabel lblEditTipoTelefone;
     private javax.swing.JLabel lblMensagem;
-    private javax.swing.JList<String> lstContatos;
+    private javax.swing.JList<IUser> lstContatos;
     private javax.swing.JList<String> lstTelefones;
     private javax.swing.JList<IPhoneType> lstTiposEnderecos;
     private javax.swing.JList<IPhoneType> lstTiposTelefones;
@@ -1375,19 +1365,7 @@ public class ListaContatos extends javax.swing.JFrame {
         phoneType = null;
     }
     
-    private void loadList() {
-        lstContatos.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = ContatoCtrl.pesquisa();
-            
-            public int getSize() {
-                return strings.length;
-            }
-            
-            public String getElementAt(int i) {
-                return strings[i];
-            }
-        });
-        lstContatos.setSelectedIndex(0);
+    private void loadList() {        
         loadContato();
     }
     
@@ -1404,23 +1382,8 @@ public class ListaContatos extends javax.swing.JFrame {
         }
         String[] retorno = nomesSobrenomes.toArray(new String[nomesSobrenomes.size()]);
         return retorno;
-    }
+    }    
     
-    private void loadList2() {
-        lstContatos.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = pesquisa();
-            
-            public int getSize() {
-                return strings.length;
-            }
-            
-            public String getElementAt(int i) {
-                return strings[i];
-            }
-        });
-        lstContatos.setSelectedIndex(0);
-        loadContato();
-    }
 
 //    private void loadListEndereco() {
 //        if (temEndereco) {
@@ -1569,7 +1532,6 @@ public class ListaContatos extends javax.swing.JFrame {
     
     private void loadContato() {
         listContato = contatoDao.lista();
-        lstContatos.setModel(contatoDao.getModel());
     }
     
     private void loadTipoTelefone() {
@@ -1680,18 +1642,7 @@ public class ListaContatos extends javax.swing.JFrame {
         edtPais.setText("");
         edtTelefone.setText("");
         edtTipoEndereco.setText("");
-        edtTipoTelefone.setText("");
-        lstContatos.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = {};
-            
-            public int getSize() {
-                return strings.length;
-            }
-            
-            public String getElementAt(int i) {
-                return strings[i];
-            }
-        });
+        edtTipoTelefone.setText("");        
         lstTelefones.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = {};
             
@@ -1746,25 +1697,7 @@ public class ListaContatos extends javax.swing.JFrame {
             desativaNomeSobrenome();
             loadContato();
         }
-    }
-    
-    private void atualizaContatoGeral() {
-        if (!edtNome.getText().isEmpty() || !edtSobrenome.getText().isEmpty()) {
-            if (ContatoCtrl.alteraGeral(
-                    lstContatos.getSelectedValue(),
-                    edtNome.getText(),
-                    edtSobrenome.getText())) {
-                JOptionPane.showMessageDialog(rootPane, "Contato atualizado com sucesso!", "Aviso", JOptionPane.INFORMATION_MESSAGE);
-            } else {
-                JOptionPane.showMessageDialog(rootPane, "Erro ao atualizado contato!", "Aviso", JOptionPane.ERROR_MESSAGE);
-            }
-            desativaNomeSobrenome();
-            loadList2();
-            btnOK.setEnabled(false);
-            btnCancel.setEnabled(false);
-            comando = "";
-        }
-    }
+    }    
     
     private void deletaContato() {
         if (contato != null) {
